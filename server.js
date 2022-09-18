@@ -26,8 +26,13 @@ io.use((socket,next)=>{
 
 io.on('connection',(socket)=>{
 
+    console.log(socket.conn.transport.name)
     // when a new socket is connected
     console.log(socket.handshake.auth.username,'is connected')
+
+    socket.conn.on("upgrade", () => {
+        const upgradedTransport = socket.conn.transport.name; // in most cases, "websocket"
+    });
 
     // when a player wants to create a new game id
     socket.on('create',(res)=>{
