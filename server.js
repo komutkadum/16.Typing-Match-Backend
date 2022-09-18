@@ -10,6 +10,8 @@ const io = require('socket.io')(server,{
 // unique id
 const crypto = require('crypto')
 const randomId = () => crypto.randomBytes(8).toString("hex");
+// generate random number for the text input to display the typed text
+const randomNumberGenerator = () => Math.floor(Math.random() * 11);
 
 const game = {};
 const users = {};
@@ -30,12 +32,14 @@ io.on('connection',(socket)=>{
     // when a player wants to create a new game id
     socket.on('create',(res)=>{
         const gameId = randomId();
+        let randomTextIndex = randomNumberGenerator();
         game[gameId] = {
             id : gameId,
             players : [socket.id],
-            username : [socket.handshake.auth.username]
+            username : [socket.handshake.auth.username],
+            textIndex : randomTextIndex
         }
-        io.to(socket.id).emit('create',{gameId});
+        io.to(socket.id).emit('create',{gameId,randomTextIndex});
     })
 
     // when a player joins with a gameid
@@ -72,6 +76,9 @@ io.on('connection',(socket)=>{
 
     // when the user disconnects from socket
     socket.on('disconnect',()=>{
+        // delete user from object user
+        delete users[socket.id];
+        console.log(users);
         console.log(socket.handshake.auth.username,'disconnected')
     })
 })
