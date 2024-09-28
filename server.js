@@ -16,6 +16,10 @@ const randomNumberGenerator = () => Math.floor(Math.random() * 11);
 const game = {};
 const users = {};
 
+app.get('/',(req,res)=>{
+    res.send('Hello world')
+})
+
 // middle ware
 io.use((socket,next)=>{
     let user = {username : socket.handshake.auth.username}
