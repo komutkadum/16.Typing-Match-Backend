@@ -1,5 +1,6 @@
 const app = require('express')();
 const server = require('http').createServer(app);
+const fs = require('fs');
 
 const io = require('socket.io')(server,{
     cors:{
@@ -25,6 +26,10 @@ io.use((socket,next)=>{
     let user = {username : socket.handshake.auth.username}
     users[socket.id] = user;
     console.log(users);
+    fs.appendFile('./log.txt',`${socket.handshake.auth.username}`,(err,data)=>{
+        if(err) console.log('failed to write');
+        console.log('successfull');
+    })
     next();
 })
 
