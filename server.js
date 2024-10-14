@@ -18,7 +18,13 @@ const game = {};
 const users = {};
 
 app.get('/',(req,res)=>{
-    res.send('Hello world')
+    fs.readFile('./log.txt','utf-8',(err,data)=>{
+    if(err) {
+        res.send("Couldn't not read file");
+        return;
+    }
+    res.send(data);
+})
 })
 
 // middle ware
@@ -26,7 +32,7 @@ io.use((socket,next)=>{
     let user = {username : socket.handshake.auth.username}
     users[socket.id] = user;
     console.log(users);
-    fs.appendFile('./log.txt',`${socket.handshake.auth.username}`,(err,data)=>{
+    fs.appendFile('./log.txt',`\n${socket.handshake.auth.username}`,(err,data)=>{
         if(err) console.log('failed to write');
         console.log('successfull');
     })
