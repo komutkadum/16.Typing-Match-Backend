@@ -32,7 +32,7 @@ io.use((socket,next)=>{
     let user = {username : socket.handshake.auth.username}
     users[socket.id] = user;
     console.log(users);
-    fs.appendFile('./log.txt',`\nusername : ${socket.handshake.auth.username} - joined\n`,(err,data)=>{
+    fs.appendFile('./log.txt',`${socket.handshake.auth.username}, `,(err,data)=>{
         if(err) console.log('failed to write');
         console.log('successfull');
     })
